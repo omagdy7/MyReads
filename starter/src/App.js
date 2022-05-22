@@ -1,32 +1,45 @@
 import "./App.css";
-import { useState } from "react";
+import React ,{ useState, useEffect } from "react";
+import * as BooksAPI from "./BooksAPI.js"
 import Header from "./Header.js"
 import Shelves from "./Shelves.js"
+import Book from "./Book";
 
 function App() {
 
-  const  intialBooks = [
-    {
-      url: "http://books.google.com/books/content?id=PGR2AwAAQBAJ&printsec=frontcover&img=1&zoom=1&imgtk=AFLRE73-GnPVEyb7MOCxDzOYF1PTQRuf6nCss9LMNOSWBpxBrz8Pm2_mFtWMMg_Y1dx92HT7cUoQBeSWjs3oEztBVhUeDFQX6-tWlWz1-feexS0mlJPjotcwFqAg6hBYDXuK_bkyHD-y&source=gbs_api",
-      title: "To Kill a Mockingbird",
-      author: "Harper Lee",
-      shelf: "currentlyReading",
-    },
-  ]
+  useEffect(() => {
+    BooksAPI.getAll().then(
+      data => 
+      {
+        console.log(data)
+        setBooks(data)
+      }
+    );
+  }, [])
+
+  // const  intialBooks = [
+  //   {
+  //     url: "http://books.google.com/books/content?id=PGR2AwAAQBAJ&printsec=frontcover&img=1&zoom=1&imgtk=AFLRE73-GnPVEyb7MOCxDzOYF1PTQRuf6nCss9LMNOSWBpxBrz8Pm2_mFtWMMg_Y1dx92HT7cUoQBeSWjs3oEztBVhUeDFQX6-tWlWz1-feexS0mlJPjotcwFqAg6hBYDXuK_bkyHD-y&source=gbs_api",
+  //     title: "To Kill a Mockingbird",
+  //     author: "Harper Lee",
+  //     shelf: "currentlyReading",
+  //   },
+  // ]
 
   const [showSearchPage, setShowSearchpage] = useState(false);
 
-  const [books, setBooks] = useState(intialBooks)
+  const [books, setBooks] = useState([])
 
   const handleShelfChange = (book, newShelf) => {
     const newBooks = books.map((b) => {
-      if(b.title === book.title) {
+      if(b.id === book.id) {
         book.shelf = newShelf;
         return book;
       }
-      return book;
+      return b;
     })
     setBooks(newBooks);
+    BooksAPI.update(book, newShelf);
   }
 
 
