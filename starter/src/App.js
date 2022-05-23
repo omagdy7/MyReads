@@ -7,6 +7,18 @@ import Book from "./Book";
 
 function App() {
 
+  const [showSearchPage, setShowSearchpage] = useState(false);
+
+  const [books, setBooks] = useState([]);
+
+  const [searchBooks, setSearchBooks] = useState([]);
+
+  const [booksSuperSet, setBooksSuperSet] = useState([]);
+
+  const [mapOfIdToBooks, setMapOfIdToBooks] = useState(new Map());
+
+  const [query, setQuery] = useState("");
+
   useEffect(() => {
     BooksAPI.getAll().then(
       data => 
@@ -17,18 +29,42 @@ function App() {
     );
   }, [])
 
-  // const  intialBooks = [
-  //   {
-  //     url: "http://books.google.com/books/content?id=PGR2AwAAQBAJ&printsec=frontcover&img=1&zoom=1&imgtk=AFLRE73-GnPVEyb7MOCxDzOYF1PTQRuf6nCss9LMNOSWBpxBrz8Pm2_mFtWMMg_Y1dx92HT7cUoQBeSWjs3oEztBVhUeDFQX6-tWlWz1-feexS0mlJPjotcwFqAg6hBYDXuK_bkyHD-y&source=gbs_api",
-  //     title: "To Kill a Mockingbird",
-  //     author: "Harper Lee",
-  //     shelf: "currentlyReading",
-  //   },
-  // ]
+  //searching for books
+  useEffect(() => {
+    let isActive = true;
+    if(query) {
+    BooksAPI.search(query).then(
+      data => {data.error ? setSearchBooks([]) : isActive && setSearchBooks(data)}
+    );
+    }
+    return () => {
+      isActive = false;
+      setSearchBooks([]);
+    }
 
-  const [showSearchPage, setShowSearchpage] = useState(false);
+  },[query])
 
-  const [books, setBooks] = useState([])
+  useEffect(() => {
+    const combined = searchBooks.map(book => {
+      if (mapOfIdToBooks.has(book.id)) {
+        return mapOfIdToBooks.get(book.id);
+      } else {
+        return book;
+      }
+    })
+    setBooksSuperSet(combined);
+  }, [searchBooks])
+
+
+
+
+
+
+  const createMapOfBooks = (books) => {
+    const map = new Map();
+    books.map(book => map.set(book.id, book));
+    return map;
+  }
 
   const handleShelfChange = (book, newShelf) => {
     const newBooks = books.map((b) => {
@@ -38,9 +74,14 @@ function App() {
       }
       return b;
     })
+    if (!mapOfIdToBooks.has(book.id)) {
+      book.shelf = newShelf;
+      newBooks.push(book)
+    }
     setBooks(newBooks);
     BooksAPI.update(book, newShelf);
   }
+
 
 
   return (
@@ -58,11 +99,17 @@ function App() {
               <input
                 type="text"
                 placeholder="Search by title, author, or ISBN"
+                value={query} onChange={(e) => setQuery(e.target.value)}
               />
             </div>
           </div>
           <div className="search-books-results">
             <ol className="books-grid"></ol>
+              {booksSuperSet.map(bk => (
+                <li key={bk.id}>
+                  <Book book={bk} changeBookShelf={handleShelfChange}/>
+                </li>
+              ))}
           </div>
         </div>
       ) : (
