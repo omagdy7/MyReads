@@ -4,11 +4,11 @@ This project was part of Udacity-React Cross Skilling Nanodegree, the project is
 You can also search for books and add them to your shelves.
 
 -[Folder Structure](#folder-structure)
--[Running the cod](#running-the-code)
+-[Running the code](#running-the-code)
 -[Deployment](#deployment)
 
 # Folder Structure
-```
+```bash
 src                                                                                                                                                                  
 ├── App.css                                                                                                                                                           
 ├── App.js                                                                                                                                                            ├── BooksAPI.js                                                                                                                                                       
