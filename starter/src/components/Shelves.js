@@ -1,4 +1,3 @@
-import react from "react";
 import Shelf from "./Shelf.js";
 
 const Shelves = ({books, changeBookShelf}) => {

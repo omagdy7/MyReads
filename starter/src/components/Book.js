@@ -1,5 +1,3 @@
-import react from "react";
-
 const Book = ({book, changeBookShelf}) => {
   return (
       <div className="book">

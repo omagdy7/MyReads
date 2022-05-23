@@ -1,10 +1,10 @@
 import "./App.css";
-import React ,{ useState, useEffect } from "react";
-import { BrowserRouter , Routes, Route, Link } from 'react-router-dom';
+import { useState, useEffect } from "react";
+import { Routes, Route, Link } from 'react-router-dom';
 import * as BooksAPI from "./BooksAPI.js"
-import Header from "./Header.js"
-import Shelves from "./Shelves.js"
-import Book from "./Book";
+import Header from "./components/Header.js"
+import Shelves from "./components/Shelves.js"
+import Book from "./components/Book";
 
 function App() {
 
@@ -99,7 +99,8 @@ function App() {
     <div className="app">
       <Routes>
         <Route exact path="/" element={<Home />}/>
-        <Route path="/search" element={
+        <Route path="/search" element=
+        {
           <div className="search-books">
             <div className="search-books-bar">
             <Link to="/">
@@ -123,7 +124,8 @@ function App() {
               </ol>
             </div>
           </div>
-        }/>
+        }
+          />
       </Routes>
     </div>
   )
