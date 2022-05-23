@@ -1,13 +1,12 @@
 import "./App.css";
 import React ,{ useState, useEffect } from "react";
+import { BrowserRouter , Routes, Route, Link } from 'react-router-dom';
 import * as BooksAPI from "./BooksAPI.js"
 import Header from "./Header.js"
 import Shelves from "./Shelves.js"
 import Book from "./Book";
 
 function App() {
-
-  const [showSearchPage, setShowSearchpage] = useState(false);
 
   const [books, setBooks] = useState([]);
 
@@ -23,8 +22,8 @@ function App() {
     BooksAPI.getAll().then(
       data => 
       {
-        console.log(data)
         setBooks(data)
+        setMapOfIdToBooks(createMapOfBooks(data));
       }
     );
   }, [])
@@ -56,10 +55,6 @@ function App() {
   }, [searchBooks])
 
 
-
-
-
-
   const createMapOfBooks = (books) => {
     const map = new Map();
     books.map(book => map.set(book.id, book));
@@ -83,50 +78,55 @@ function App() {
   }
 
 
-
-  return (
-    <div className="app">
-      {showSearchPage ? (
-        <div className="search-books">
-          <div className="search-books-bar">
-            <a
-              className="close-search"
-              onClick={() => setShowSearchpage(!showSearchPage)}
-            >
-              Close
-            </a>
-            <div className="search-books-input-wrapper">
-              <input
-                type="text"
-                placeholder="Search by title, author, or ISBN"
-                value={query} onChange={(e) => setQuery(e.target.value)}
-              />
-            </div>
-          </div>
-          <div className="search-books-results">
-            <ol className="books-grid"></ol>
-              {booksSuperSet.map(bk => (
-                <li key={bk.id}>
-                  <Book book={bk} changeBookShelf={handleShelfChange}/>
-                </li>
-              ))}
-          </div>
-        </div>
-      ) : (
+  const Home = () => {
+    return (
+      <div className="Home">
+        <Header />
         <div className="list-books">
-          <Header />
           <div className="list-books-content">
             <Shelves books={books} changeBookShelf={handleShelfChange}/>
             <div className="open-search">
-              <a onClick={() => setShowSearchpage(!showSearchPage)}>Add a book</a>
+              <Link to="/search">
+              </Link>
             </div>
           </div>
+        </div>
       </div>
-      )}
-      </div>
-  )
+    )
   }
 
-
+  return (
+    <div className="app">
+      <Routes>
+        <Route exact path="/" element={<Home />}/>
+        <Route path="/search" element={
+          <div className="search-books">
+            <div className="search-books-bar">
+            <Link to="/">
+                <button className="close-search">Close</button>
+            </Link>
+              <div className="search-books-input-wrapper">
+                <input
+                  type="text"
+                  placeholder="Search by title, author, or ISBN"
+                  value={query} onChange={(e) => setQuery(e.target.value)}
+                />
+              </div>
+            </div>
+            <div className="search-books-results">
+              <ol className="books-grid">
+                {booksSuperSet.map(bk => (
+                  <li key={bk.id}>
+                    <Book book={bk} changeBookShelf={handleShelfChange}/>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          </div>
+        }/>
+      </Routes>
+    </div>
+  )
+}
 
 export default App;
