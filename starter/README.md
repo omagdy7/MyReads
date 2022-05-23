@@ -3,21 +3,9 @@
 This project was part of Udacity-React Cross Skilling Nanodegree, the project is about a organizing your books into 3 shelves (Currently Reading, Want To Read, Read),
 You can also search for books and add them to your shelves.
 
--[Folder Structure](#folder-structure)
--[Running the code](#running-the-code)
--[Deployment](#deployment)
+- [Running the code](#running-the-code)
+- [Deployment](#deployment)
 
-# Folder Structure
-```bash
-src                                                                                                                                                                  
-├── App.css                                                                                                                                                           
-├── App.js                                                                                                                                                            ├── BooksAPI.js                                                                                                                                                       
-├── components                                                                                                                                                        
-│   ├── Book.js                                                                                                                                                       │   ├── Header.js                                                                                                                                                     
-│   ├── Shelf.js                                                                                                                                                     
-│   └── Shelves.js                                                                                                                                                    ├── icons                                                                                                                                                             │   ├── add.svg                                                                                                                                           
-│   ├── arrow-back.svg                                                                                                                                                │   └── arrow-drop-down.svg                                                                                                                                           ├── index.css                                                                                                                                                         └── index.js 
-```
 
 # Running the code
 ```
