@@ -18,4 +18,10 @@ npm start #to start the backend server
 ```
 npm run build
 ```
+# Resources I have used that helped me on the project
+- [useState hook](https://www.youtube.com/watch?v=9xhKH43llhU&list=PLN3n1USn4xlmyw3ebYuZmGp60mcENitdM)
+- [useEffecthook](https://www.youtube.com/watch?v=j1ZRyw7OtZs&list=PLN3n1USn4xlmyw3ebYuZmGp60mcENitdM&index=3)
+- [Restructuring my code](https://www.youtube.com/watch?v=F3RTUOJR_g0)
+- [searchFunctionality](https://www.youtube.com/watch?v=F3RTUOJR_g0&t=0s)
+- [Routing](https://www.youtube.com/watch?v=k2Zk5cbiZhg&t=0s)
 
