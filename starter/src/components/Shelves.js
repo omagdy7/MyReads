@@ -1,24 +1,18 @@
 import Shelf from "./Shelf.js";
 
-const Shelves = ({books, changeBookShelf}) => {
-
-  const currentlyReading = books.filter((book) => 
-    book.shelf === "currentlyReading"
-  );
-  const wantToRead = books.filter((book) => 
-    book.shelf === "wantToRead"
-  );
-  const read = books.filter((book) => 
-    book.shelf === "read"
-  );
-
+const Shelves = ({books, updateBookShelf}) => {
   return (
     <div>
-      <Shelf title="Currently Reading" books={currentlyReading} changeBookShelf={changeBookShelf}/>
-      <Shelf title="Want To Read" books={wantToRead} changeBookShelf={changeBookShelf}/>
-      <Shelf title="Read" books={read} changeBookShelf={changeBookShelf}/>
+      <Shelf title="Currently Reading" 
+        books={books.filter((bk) => bk.shelf === "currentlyReading")}
+       updateBookShelf={updateBookShelf}/>
+      <Shelf title="Want to read" 
+        books={books.filter((bk) => bk.shelf === "wantToRead")}
+       updateBookShelf={updateBookShelf}/>
+      <Shelf title="Read" 
+        books={books.filter((bk) => bk.shelf === "read")}
+       updateBookShelf={updateBookShelf}/>
     </div>
-
   )
 }
 

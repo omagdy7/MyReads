@@ -14,52 +14,50 @@ function App() {
 
   const [booksSuperSet, setBooksSuperSet] = useState([]);
 
-  const [mapOfIdToBooks, setMapOfIdToBooks] = useState(new Map());
+  const [idToBooks, setIdToBooks] = useState(new Map());
 
   const [query, setQuery] = useState("");
 
+
+  //Fetching books from the database
   useEffect(() => {
     BooksAPI.getAll().then(
       data => 
       {
         setBooks(data)
-        setMapOfIdToBooks(createMapOfBooks(data));
+        setIdToBooks(generateBooksDictionary(data));
       }
     );
   }, [])
 
   //searching for books
   useEffect(() => {
-    let isActive = true;
+    let flag = true;
     if(query) {
     BooksAPI.search(query).then(
-      data => {data.error ? setSearchBooks([]) : isActive && setSearchBooks(data)}
+      data => {data.error ? setSearchBooks([]) : flag && setSearchBooks(data)}
     );
     }
     return () => {
-      isActive = false;
+      flag = false;
       setSearchBooks([]);
     }
 
   },[query])
 
+
   useEffect(() => {
-    const combined = searchBooks.map(book => {
-      if (mapOfIdToBooks.has(book.id)) {
-        return mapOfIdToBooks.get(book.id);
+    const superSet = searchBooks.map(book => {
+      if (idToBooks.has(book.id)) {
+        return idToBooks.get(book.id);
       } else {
         return book;
       }
     })
-    setBooksSuperSet(combined);
+    setBooksSuperSet(superSet);
   }, [searchBooks])
 
 
-  const createMapOfBooks = (books) => {
-    const map = new Map();
-    books.map(book => map.set(book.id, book));
-    return map;
-  }
 
   const handleShelfChange = (book, newShelf) => {
     const newBooks = books.map((b) => {
@@ -69,7 +67,7 @@ function App() {
       }
       return b;
     })
-    if (!mapOfIdToBooks.has(book.id)) {
+    if (!idToBooks.has(book.id)) {
       book.shelf = newShelf;
       newBooks.push(book)
     }
@@ -77,6 +75,11 @@ function App() {
     BooksAPI.update(book, newShelf);
   }
 
+  const generateBooksDictionary = (books) => {
+    const dict = new Map();
+    books.map(bk => dict.set(bk.id, bk));
+    return dict;
+  }
 
   const Home = () => {
     return (
@@ -84,7 +87,7 @@ function App() {
         <Header />
         <div className="list-books">
           <div className="list-books-content">
-            <Shelves books={books} changeBookShelf={handleShelfChange}/>
+            <Shelves books={books} updateBookShelf={handleShelfChange}/>
             <div className="open-search">
               <Link to="/search">
               </Link>
@@ -118,7 +121,7 @@ function App() {
               <ol className="books-grid">
                 {booksSuperSet.map(bk => (
                   <li key={bk.id}>
-                    <Book book={bk} changeBookShelf={handleShelfChange}/>
+                    <Book book={bk} updateBookShelf={handleShelfChange}/>
                   </li>
                 ))}
               </ol>
